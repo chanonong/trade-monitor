@@ -43,6 +43,7 @@ class OrderType(Enum):
     STOP = "STOP"
     STOP_MARKET = "STOP_MARKET"
     TAKE_PROFIT = "TAKE_PROFIT"
+    TAKE_PROFIT_MARKET = "TAKE_PROFIT_MARKET"
     LIQUIDATION = "LIQUIDATION"
 
 class ExecutionType(Enum):
