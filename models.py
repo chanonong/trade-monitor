@@ -8,7 +8,7 @@ class EventType(Enum):
     ACCOUNT_CONFIG_UPDATE = "ACCOUNT_CONFIG_UPDATE"
 
 class MarginType(Enum):
-    CROSSED = "CROSSED"
+    CROSS = "CROSS"
     ISOLATED = "ISOLATED"
 
 class AccountUpdateReason(Enum):
@@ -94,7 +94,7 @@ class PositionUpdate(Repr):
         self.symbol = payload['s']
         self.position_side = payload['ps']
         self.position_amount = float(payload['pa'])
-        self.margin_type = MarginType[payload['mt']]
+        self.margin_type = MarginType[payload['mt'].upper()]
         self.isolated_wallet = float(payload['iw']) if 'iw' in payload.keys() else None
         self.mark_price = float(payload['mp']) if 'mp' in payload.keys() else None
         self.entry_price = float(payload['ep']) if 'ep' in payload.keys() else None
