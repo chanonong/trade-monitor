@@ -191,11 +191,11 @@ class WsResponse(Repr):
         if self.cross_wallet_balance:
             message += f"cross_wallet_balance: {self.cross_wallet_balance}"
         if self.position_update:
-            message += f"NOT_IMPLEMENTED"
+            message += repr(self.position_update)
         if self.order_trade_update:
             message += str(self.order_trade_update)
         if self.account_update:
-            message += f"NOT_IMPLEMENTED"
+            message += repr(self.account_update)
         if self.account_config_update:
             message += str(self.account_config_update)
         if self.account_info_update:

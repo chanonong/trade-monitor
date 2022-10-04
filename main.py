@@ -62,9 +62,13 @@ if __name__ == "__main__":
 
     def send_telegram_message(message, chat_ids=[]):
         for chat_id in chat_ids:
-            # updater.bot.send_message(chat_id=chat_id, text=parse_markdown(message), parse_mode='MarkdownV2')
-            updater.bot.send_message(chat_id=chat_id, text=message)
-    
+            try:
+                # updater.bot.send_message(chat_id=chat_id, text=parse_markdown(message), parse_mode='MarkdownV2')
+                updater.bot.send_message(chat_id=chat_id, text=message)
+            except Exception as e:
+                print(e)
+                continue
+
     for exchange in configs['exchanges']:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
