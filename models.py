@@ -100,7 +100,7 @@ class PositionUpdate(Repr):
         self.mark_price = float(payload['mp']) if 'mp' in payload.keys() else None
         self.entry_price = float(payload['ep']) if 'ep' in payload.keys() else None
         self.unrelized_pnl = float(payload['up']) 
-        self.maintainance_margin = float(payload['mm']) 
+        self.maintainance_margin = float(payload['mm']) if 'mm' in payload.keys() else None
         self.accumulated_relized = float(payload['cr']) if 'cr' in payload.keys() else None
 
     def __str__(self) -> str:

@@ -15,8 +15,6 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
 
-TOKEN = "5173401188:AAEOtTrM2Sqkx7XQFnCX5HmXfB510h-oPLE"
-
 def error(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=context.error)
 
