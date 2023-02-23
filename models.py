@@ -104,7 +104,8 @@ class PositionUpdate(Repr):
         self.accumulated_relized = float(payload['cr']) if 'cr' in payload.keys() else None
 
     def __str__(self) -> str:
-        return super().__str__()
+        usd = self.position_amount * self.entry_price
+        return f"{self.symbol} {self.position_amount} {usd} | {self.unrelized_pnl}"
 
 class BalanceUpdate(Repr):
     def __init__(self, payload) -> None:
@@ -112,6 +113,9 @@ class BalanceUpdate(Repr):
         self.wallet_balance = float(payload['wb'])
         self.cross_wallet_balance = float(payload['cw'])
         self.balance_change = float(payload['bc'])
+    
+    def __str__(self) -> str:
+        return f"{self.wallet_balance} {self.asset}"
 
 class AccountUpdate(Repr):
     def __init__(self, payload) -> None:
@@ -188,7 +192,7 @@ class WsResponse(Repr):
         self.account_info_update = AccountConfigUpdate(payload['ai']) if 'ai' in payload.keys() else None
 
     def __str__(self) -> str:
-        message = f"{self.event_type} @ {self.event_time}\n----\n"
+        message = f"[{str(self.event_type)}]\n"# @ {self.event_time}\n----\n"
         if self.cross_wallet_balance:
             message += f"cross_wallet_balance: {self.cross_wallet_balance}"
         if self.position_update:
