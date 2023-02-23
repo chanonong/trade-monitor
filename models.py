@@ -165,7 +165,7 @@ class OrderTradeUpdate(Repr):
             self.price = self.stop_price
 
     def __str__(self) -> str:
-        return f"{str(self.execution_type)} {self.symbol} {self.side} @ {self.price} @ {self.order_filled_accumulated_quantity}/{self.original_quantity}"
+        return f"{self.execution_type.value} {self.symbol} {self.side} @ {self.price} @ {self.order_filled_accumulated_quantity}/{self.original_quantity}"
 
 
 class AccountConfigUpdate(Repr):
@@ -192,7 +192,7 @@ class WsResponse(Repr):
         self.account_info_update = AccountConfigUpdate(payload['ai']) if 'ai' in payload.keys() else None
 
     def __str__(self) -> str:
-        message = f"[{str(self.event_type)}]\n"# @ {self.event_time}\n----\n"
+        message = f"[{self.event_type.value}]\n"# @ {self.event_time}\n----\n"
         if self.cross_wallet_balance:
             message += f"cross_wallet_balance: {self.cross_wallet_balance}"
         if self.position_update:
