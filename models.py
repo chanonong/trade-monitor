@@ -165,7 +165,9 @@ class OrderTradeUpdate(Repr):
             self.price = self.stop_price
 
     def __str__(self) -> str:
-        return f"{self.execution_type.value} {self.symbol} {self.side} @ {self.price} @ {self.order_filled_accumulated_quantity}/{self.original_quantity}"
+        usd_accum = self.order_filled_accumulated_quantity * self.original_price
+        usd = self.original_quantity * self.original_price
+        return f"{self.execution_type.value} {self.symbol} {self.side} @ {self.price} @ {usd_accum}/{usd}"
 
 
 class AccountConfigUpdate(Repr):
