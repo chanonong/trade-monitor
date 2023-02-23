@@ -105,6 +105,9 @@ class PositionUpdate(Repr):
 
     def __str__(self) -> str:
         usd = self.position_amount * self.entry_price
+        if usd == 0.0:
+            pnl = (self.mark_price - self.entry_price) * self.position_amount
+            return f"{self.symbol} {pnl:.2f}" 
         return f"{self.symbol} {self.position_amount} {usd} | {self.unrelized_pnl}"
 
 class BalanceUpdate(Repr):
@@ -115,7 +118,7 @@ class BalanceUpdate(Repr):
         self.balance_change = float(payload['bc'])
     
     def __str__(self) -> str:
-        return f"{self.wallet_balance} {self.asset}"
+        return f"{self.wallet_balance:.4f} {self.asset}"
 
 class AccountUpdate(Repr):
     def __init__(self, payload) -> None:
@@ -124,7 +127,7 @@ class AccountUpdate(Repr):
          self.positions = [PositionUpdate(_) for _ in payload['P']]
     
     def __str__(self) -> str:
-        message = f"Reason: {self.event_reason_type}\n"
+        message = f"Reason: {self.event_reason_type.value}\n"
         if self.balances:
             message += f"Balance:\n"
             for _ in self.balances:
