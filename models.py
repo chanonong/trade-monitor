@@ -122,6 +122,16 @@ class AccountUpdate(Repr):
          self.event_reason_type = EventReasonType[payload['m']]
          self.balances = [BalanceUpdate(_) for _ in payload['B']]
          self.positions = [PositionUpdate(_) for _ in payload['P']]
+    
+    def __str__(self) -> str:
+        message = f"Reason: {self.event_reason_type}\n"
+        if self.balances:
+            message += f"Balance:\n"
+            message += ["\t"+str(_) for _ in self.balances]
+        if self.positions:
+            message += f"Positions:\n"
+            message += ["\t"+str(_) for _ in self.positions]
+        return message
 
 class OrderTradeUpdate(Repr):
     def __init__(self, payload) -> None:
@@ -202,9 +212,9 @@ class WsResponse(Repr):
         if self.order_trade_update:
             message += str(self.order_trade_update)
         if self.account_update:
-            message += repr(self.account_update)
+            message += str(self.account_update)
         if self.account_config_update:
-            message += str(self.account_config_update)
+            message += repr(self.account_config_update)
         if self.account_info_update:
-            message += str(self.account_info_update)
+            message += repr(self.account_info_update)
         return message
