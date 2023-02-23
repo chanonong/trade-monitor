@@ -127,10 +127,12 @@ class AccountUpdate(Repr):
         message = f"Reason: {self.event_reason_type}\n"
         if self.balances:
             message += f"Balance:\n"
-            message += ["\t"+str(_) for _ in self.balances]
+            for _ in self.balances:
+                message += "\t"+str(_) 
         if self.positions:
             message += f"Positions:\n"
-            message += ["\t"+str(_) for _ in self.positions]
+            for _ in self.positions:
+                message += "\t"+str(_) 
         return message
 
 class OrderTradeUpdate(Repr):
