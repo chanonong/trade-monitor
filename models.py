@@ -107,8 +107,8 @@ class PositionUpdate(Repr):
         usd = self.position_amount * self.entry_price
         if usd == 0.0:
             pnl = (self.mark_price - self.entry_price) * self.position_amount
-            return f"{self.symbol} {pnl:.2f}" 
-        return f"{self.symbol} {self.position_amount} {usd} | {self.unrelized_pnl}"
+            return f"{self.symbol} pnl: {pnl:.2f}" 
+        return f"{self.symbol} {self.position_amount} {usd} | upnl: {self.unrelized_pnl}"
 
 class BalanceUpdate(Repr):
     def __init__(self, payload) -> None:
