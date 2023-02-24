@@ -105,7 +105,8 @@ class PositionUpdate(Repr):
 
     def __str__(self) -> str:
         usd = self.position_amount * self.entry_price
-        if usd == 0.0:
+        if usd == 0.0 and self.mark_price and self.entry_price and self.position_amount:
+            print(repr(self))
             pnl = (self.mark_price - self.entry_price) * self.position_amount
             return f"{self.symbol} pnl: {pnl:.2f}" 
         return f"{self.symbol} {self.position_amount} {usd} | upnl: {self.unrelized_pnl}"
