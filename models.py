@@ -104,11 +104,9 @@ class PositionUpdate(Repr):
         self.accumulated_relized = float(payload['cr']) if 'cr' in payload.keys() else None
 
     def __str__(self) -> str:
-        print(repr(self))
         usd = self.position_amount * self.entry_price
-        if usd == 0.0 and self.mark_price and self.entry_price and self.position_amount:
-            pnl = (self.mark_price - self.entry_price) * self.position_amount
-            return f"{self.symbol} pnl: {pnl:.2f}" 
+        if usd == 0.0:
+            return f"{self.symbol} closed" 
         return f"{self.symbol} {self.position_amount} {usd} | upnl: {self.unrelized_pnl}"
 
 class BalanceUpdate(Repr):
@@ -132,11 +130,11 @@ class AccountUpdate(Repr):
         if self.balances:
             message += f"Balance:\n"
             for _ in self.balances:
-                message += "\t"+str(_) 
+                message += f"\t{str(_)}\n"
         if self.positions:
-            message += f"\nPositions:\n"
+            message += f"Positions:\n"
             for _ in self.positions:
-                message += "\t"+str(_) 
+                message += f"\t{str(_)}\n"
         return message
 
 class OrderTradeUpdate(Repr):
