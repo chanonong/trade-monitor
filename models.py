@@ -104,9 +104,9 @@ class PositionUpdate(Repr):
         self.accumulated_relized = float(payload['cr']) if 'cr' in payload.keys() else None
 
     def __str__(self) -> str:
+        print(repr(self))
         usd = self.position_amount * self.entry_price
         if usd == 0.0 and self.mark_price and self.entry_price and self.position_amount:
-            print(repr(self))
             pnl = (self.mark_price - self.entry_price) * self.position_amount
             return f"{self.symbol} pnl: {pnl:.2f}" 
         return f"{self.symbol} {self.position_amount} {usd} | upnl: {self.unrelized_pnl}"
