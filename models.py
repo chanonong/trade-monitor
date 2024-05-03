@@ -238,4 +238,4 @@ class WsResponse(Repr):
             message += repr(self.account_config_update)
         if self.account_info_update:
             message += repr(self.account_info_update)
-        return f"```message```"
+        return f"```\n{message}```"
