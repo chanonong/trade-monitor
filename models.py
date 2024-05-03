@@ -225,7 +225,7 @@ class WsResponse(Repr):
         self.account_info_update = AccountConfigUpdate(payload['ai']) if 'ai' in payload.keys() else None
 
     def __str__(self) -> str:
-        message = f"[{self.event_type.value}]\n"# @ {self.event_time}\n----\n"
+        message = f""# @ {self.event_time}\n----\n"
         if self.cross_wallet_balance:
             message += f"cross_wallet_balance: {self.cross_wallet_balance}"
         if self.position_update:
@@ -238,4 +238,4 @@ class WsResponse(Repr):
             message += repr(self.account_config_update)
         if self.account_info_update:
             message += repr(self.account_info_update)
-        return f"```\n{message}```"
+        return f"[{self.event_type.value}]\n```{message}```"
