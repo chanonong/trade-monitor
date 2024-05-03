@@ -2,10 +2,13 @@ from enum import Enum
 from utils import Repr
 
 class EventType(Enum):
-    MARGIN_CALL = "MARGIN_CALL"
     ACCOUNT_UPDATE = "ACCOUNT_UPDATE"
+    MARGIN_CALL = "MARGIN_CALL"
     ORDER_TRADE_UPDATE = "ORDER_TRADE_UPDATE"
     ACCOUNT_CONFIG_UPDATE = "ACCOUNT_CONFIG_UPDATE"
+    STRATEGY_UPDATE = "STRATEGY_UPDATE"
+    GRID_UPDATE = "GRID_UPDATE"
+    CONDITIONAL_ORDER_TRIGGER_REJECT = "CONDITIONAL_ORDER_TRIGGER_REJECT"
 
 class MarginType(Enum):
     CROSS = "CROSS"
@@ -27,6 +30,8 @@ class AccountUpdateReason(Enum):
     OPTIONS_PREMIUM_FEE = "OPTIONS_PREMIUM_FEE"
     OPTIONS_SETTLE_PROFIT = "OPTIONS_SETTLE_PROFIT"
     AUTO_EXCHANGE = "AUTO_EXCHANGE"
+    COIN_SWAP_DEPOSIT = "COIN_SWAP_DEPOSIT"
+    COIN_SWAP_WITHDRAW = "COIN_SWAP_WITHDRAW"
 
 class Side(Enum):
     BUY = "BUY"
@@ -198,8 +203,20 @@ class AccountConfigUpdate(Repr):
 
 class WsResponse(Repr):
     def __init__(self, payload) -> None:
-        self.event_type = EventType[payload['e']]
+        try:
+            self.event_type = EventType[payload['e']]
+        except KeyError:
+            return f"Unknown Key {payload['e']}"
         self.event_time = payload['E']
+
+        # self.account_update = None
+        # self.margin_call = None
+        # self.order_trade_update = None
+        # self.account_config_update = None
+        # self.strategy_update = None
+        # self.grid_update = None
+        # self.conditional_order_trigger_reject = None
+      
         self.cross_wallet_balance = float(payload['cw']) if 'cw' in payload.keys() else None
         self.position_update = PositionUpdate(payload['p']) if 'p' in payload.keys() else None
         self.order_trade_update = OrderTradeUpdate (payload['o']) if 'o' in payload.keys() else None
