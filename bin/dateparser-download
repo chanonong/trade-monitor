@@ -1,4 +1,4 @@
-#!/home/ck/trade-monitor/bin/python3.10
+#!/root/trade-monitor/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys
