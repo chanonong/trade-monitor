@@ -1,5 +1,6 @@
 from enum import Enum
 from utils import Repr
+import json
 
 class EventType(Enum):
     ACCOUNT_UPDATE = "ACCOUNT_UPDATE"
@@ -294,4 +295,4 @@ class WsResponse(Repr):
             message += repr(self.account_config_update)
         if self.account_info_update:
             message += repr(self.account_info_update)
-        return f"[{self.event_type.value}]\n```{message}```"
+        return f"[{self.event_type.value}]\n```\n{message}```"
