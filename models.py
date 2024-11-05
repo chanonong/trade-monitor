@@ -206,7 +206,7 @@ class WsResponse(Repr):
         try:
             self.event_type = EventType[payload['e']]
         except KeyError:
-            return f"Unknown Key {payload['e']}"
+            print(f"[!] Unknown Key {payload['e']}")
         self.event_time = payload['E']
 
         # self.account_update = None
