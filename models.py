@@ -9,6 +9,7 @@ class EventType(Enum):
     STRATEGY_UPDATE = "STRATEGY_UPDATE"
     GRID_UPDATE = "GRID_UPDATE"
     CONDITIONAL_ORDER_TRIGGER_REJECT = "CONDITIONAL_ORDER_TRIGGER_REJECT"
+    TRADE_LITE  = "TRADE_LITE"
 
 class MarginType(Enum):
     CROSS = "CROSS"
@@ -207,6 +208,7 @@ class WsResponse(Repr):
             self.event_type = EventType[payload['e']]
         except KeyError:
             print(f"[!] Unknown Key {payload['e']}")
+            print(json.dumps(payload['e'], indent=2))
         self.event_time = payload['E']
 
         # self.account_update = None
@@ -216,13 +218,19 @@ class WsResponse(Repr):
         # self.strategy_update = None
         # self.grid_update = None
         # self.conditional_order_trigger_reject = None
-      
-        self.cross_wallet_balance = float(payload['cw']) if 'cw' in payload.keys() else None
-        self.position_update = PositionUpdate(payload['p']) if 'p' in payload.keys() else None
-        self.order_trade_update = OrderTradeUpdate (payload['o']) if 'o' in payload.keys() else None
-        self.account_update = AccountUpdate(payload['a']) if 'a' in payload.keys() else None
-        self.account_config_update = AccountConfigUpdate(payload['ac']) if 'ac' in payload.keys() else None
-        self.account_info_update = AccountConfigUpdate(payload['ai']) if 'ai' in payload.keys() else None
+        payload_keys = payload.keys()
+
+        if self.event_type == EventType.TRADE_LITE:
+            # ignore for now
+            print('event TRADE_LITE')
+            pass
+        else:
+            self.cross_wallet_balance = float(payload['cw']) if 'cw' in payload.keys() else None
+            self.position_update = PositionUpdate(payload['p']) if 'p' in payload.keys() else None
+            self.order_trade_update = OrderTradeUpdate (payload['o']) if 'o' in payload.keys() else None
+            self.account_update = AccountUpdate(payload['a']) if 'a' in payload.keys() else None
+            self.account_config_update = AccountConfigUpdate(payload['ac']) if 'ac' in payload.keys() else None
+            self.account_info_update = AccountConfigUpdate(payload['ai']) if 'ai' in payload.keys() else None
 
     def __str__(self) -> str:
         message = f""# @ {self.event_time}\n----\n"
