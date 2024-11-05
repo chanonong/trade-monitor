@@ -10,6 +10,7 @@ class EventType(Enum):
     GRID_UPDATE = "GRID_UPDATE"
     CONDITIONAL_ORDER_TRIGGER_REJECT = "CONDITIONAL_ORDER_TRIGGER_REJECT"
     TRADE_LITE  = "TRADE_LITE"
+    USER_DATA_STREAM_EXPIRED = "listenKeyExpired"
 
 class MarginType(Enum):
     CROSS = "CROSS"
@@ -188,6 +189,52 @@ class OrderTradeUpdate(Repr):
         usd_accum = self.order_filled_accumulated_quantity * self.original_price
         usd = self.original_quantity * self.original_price
         return f"{self.execution_type.value} {self.symbol} {self.side.value} @ {self.price} ({usd_accum:.2f}/{usd:.2f})"
+    
+class TradeLite(Repr):
+    def __init__(self, payload) -> None:
+        self.symbol = payload['s']
+        self.client_order_id = payload['c']
+        self.side = Side[payload['S']]
+        # self.order_type = OrderType[payload['o']]
+        # self.time_in_force = TimeInForce[payload['f']]
+        self.original_quantity = float(payload['q'])
+        self.original_price = float(payload['p'])
+        # self.average_price = float(payload['ap'])
+        # self.stop_price = float(payload['sp'])
+        # self.execution_type = ExecutionType[payload['x']]
+        # self.order_status = OrderStatus[payload['X']]
+        self.order_id = int(payload['i'])
+        self.order_last_filled_quantity = float(payload['l'])
+        # self.order_filled_accumulated_quantity = float(payload['z'])
+        self.last_filled_price = float(payload['L'])
+        # self.commission_asset = payload['N'] if 'N' in payload.keys() else None
+        # self.commission = float(payload['n']) if 'n' in payload.keys() else None
+        self.order_trade_time = int(payload['T'])
+        self.trade_id = int(payload['t'])
+        # self.bids = float(payload['b'])
+        # self.asks = float(payload['a'])
+        self.maker = bool(payload['m'])
+        # self.reduce_only = bool(payload['R'])
+        # self.working_type = WorkingType[payload['wt']]
+        # self.order_type = OrderType[payload['ot']]
+        # self.position_side = PositionSide[payload['ps']]
+        # self.close_all = bool(payload['cp'])
+        # self.activation_price = float(payload['AP']) if 'AP' in payload.keys() else None
+        # self.callback_rate = float(payload['cr'])  if 'cr' in payload.keys() else None
+        # self.realized_profit = float(payload['rp'])
+
+        self.price = None
+        if self.original_price:
+            self.price = self.original_price
+        # elif self.average_price:
+        #     self.price = self.average_price
+        # elif self.stop_price:
+        #     self.price = self.stop_price
+
+    def __str__(self) -> str:
+        usd_accum = self.order_last_filled_quantity * self.original_price
+        usd = self.original_quantity * self.original_price
+        return f"TRADE_LITE {self.symbol} {self.side.value} @ {self.price} ({usd_accum:.2f}/{usd:.2f})"
 
 
 class AccountConfigUpdate(Repr):
@@ -223,6 +270,7 @@ class WsResponse(Repr):
         if self.event_type == EventType.TRADE_LITE:
             # ignore for now
             print('event TRADE_LITE')
+            self.trade_lite = TradeLite(payload)
             pass
         else:
             self.cross_wallet_balance = float(payload['cw']) if 'cw' in payload.keys() else None
