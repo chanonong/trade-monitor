@@ -259,14 +259,12 @@ class WsResponse(Repr):
             print(json.dumps(payload['e'], indent=2))
         self.event_time = payload['E']
 
-        # self.account_update = None
-        # self.margin_call = None
-        # self.order_trade_update = None
-        # self.account_config_update = None
-        # self.strategy_update = None
-        # self.grid_update = None
-        # self.conditional_order_trigger_reject = None
-        payload_keys = payload.keys()
+        self.cross_wallet_balance = None
+        self.position_update = None
+        self.order_trade_update = None
+        self.account_update = None
+        self.account_config_update = None
+        self.account_info_update = None
 
         if self.event_type == EventType.TRADE_LITE:
             # ignore for now
